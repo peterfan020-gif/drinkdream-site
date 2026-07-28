@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>寻找我们 · 門市據點 | DRINKDREAM</title>
+  <meta name="description" content="查找DRINKDREAM旗下所有品牌门店位置，支持按品牌和城市筛选。">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="https://www.drink-dream.com/images/logotitle.png" type="image/png">
+  <style>
+    html,body{height:100%}
+    .find-us-wrapper{display:flex;flex-direction:column;height:100%;padding-top:var(--header-h)}
+    .find-us-main{display:flex;flex:1;min-height:0}
+    .filter-panel{width:380px;min-width:380px;background:var(--bg);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;z-index:10}
+    .filter-header{padding:28px 28px 20px;border-bottom:1px solid var(--border)}
+    .filter-header h2{font-size:22px;font-weight:800;letter-spacing:.02em;margin-bottom:4px;color:var(--text)}
+    .filter-header p{font-size:13px;color:var(--text3)}
+    .filter-group{padding:18px 28px;border-bottom:1px solid var(--border)}
+    .filter-group h3{font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--text3);margin-bottom:12px}
+    .filter-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .filter-chip{padding:6px 16px;font-size:12px;font-weight:500;border:1px solid rgba(0,0,0,.12);border-radius:980px;background:transparent;cursor:pointer;transition:all .25s;font-family:inherit;color:var(--text2)}
+    .filter-chip:hover{border-color:var(--text);color:var(--text)}
+    .filter-chip.active{background:var(--text);color:#fff;border-color:var(--text)}
+    .store-count{font-size:12px;color:var(--text3);padding:0 28px;margin:8px 0}
+    .store-list{flex:1;overflow-y:auto}
+    .store-card{padding:16px 28px;cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+    .store-card:hover{background:var(--bg-gray)}
+    .store-card.active{background:var(--bg-gray);border-left-color:var(--text)}
+    .store-card h4{font-size:14px;font-weight:600;margin-bottom:3px;color:var(--text)}
+    .store-card .brand-tag{display:inline-block;padding:2px 10px;font-size:10px;font-weight:600;border-radius:980px;margin-bottom:5px;color:#fff;letter-spacing:.04em}
+    .store-card p{font-size:12px;color:var(--text2);line-height:1.5}
+    .store-card .store-detail{font-size:11px;color:var(--text3);margin-top:3px}
+    .map-wrap{flex:1;position:relative;min-height:0}
+    #map{width:100%;height:100%}
+    #map img{pointer-events:auto!important}
+    .leaflet-container{background:#f8f8f8!important}
+    .leaflet-popup-content-wrapper{border-radius:12px!important;box-shadow:0 4px 20px rgba(0,0,0,.12)!important}
+    .leaflet-popup-content{margin:14px 18px!important;font-family:var(--font)!important;font-size:13px!important}
+    .map-legend{position:absolute;bottom:20px;left:20px;background:var(--bg);border-radius:12px;padding:12px 18px;box-shadow:var(--shadow);font-size:11px;display:flex;flex-wrap:wrap;gap:10px;z-index:1000}
+    .legend-dot{display:inline-flex;align-items:center;gap:5px}
+    .legend-dot span{width:10px;height:10px;border-radius:50%;display:inline-block}
+    @media(max-width:734px){
+      .find-us-main{flex-direction:column}
+      .filter-panel{width:100%;min-width:100%;max-height:40vh;border-right:none;border-bottom:1px solid var(--border)}
+      .map-wrap{flex:1;height:60vh;min-height:300px}
+      .filter-header{padding:20px 20px 16px}.filter-group{padding:14px 20px}.store-card{padding:14px 20px}
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html"><img src="https://www.drink-dream.com/images/logo.png" alt="DRINK DREAM"></a>
+    <nav class="nav"><a href="index.html">品牌矩阵</a><a href="about.html">关于我们</a><a href="find-us.html" class="active">寻找我们</a><a href="#">加入我们</a></nav>
+    <button class="menu-toggle" aria-label="菜单">☰</button>
+  </div>
+</header>
+
+<div class="find-us-wrapper">
+  <div class="find-us-main">
+    <aside class="filter-panel">
+      <div class="filter-header">
+        <h2>寻找我们</h2><p>探索 DRINKDREAM 全国门店</p>
+      </div>
+      <div class="filter-group">
+        <h3>品牌筛选</h3>
+        <div class="filter-chips" id="brand-filters">
+          <button class="filter-chip active" data-filter="all">全部</button>
+          <button class="filter-chip" data-filter="九十葉">九十葉</button>
+          <button class="filter-chip" data-filter="BLACKTREE">BLACKTREE</button>
+          <button class="filter-chip" data-filter="Matcha Wang">Matcha Wang</button>
+          <button class="filter-chip" data-filter="Yoajung">Yoajung</button>
+          <button class="filter-chip" data-filter="抹趣">抹趣</button>
+          <button class="filter-chip" data-filter="lemonwell">lemonwell</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <h3>城市筛选</h3>
+        <div class="filter-chips" id="city-filters">
+          <button class="filter-chip active" data-filter="all">全部</button>
+          <button class="filter-chip" data-filter="上海">上海</button><button class="filter-chip" data-filter="北京">北京</button>
+          <button class="filter-chip" data-filter="深圳">深圳</button><button class="filter-chip" data-filter="广州">广州</button>
+          <button class="filter-chip" data-filter="杭州">杭州</button><button class="filter-chip" data-filter="南京">南京</button>
+          <button class="filter-chip" data-filter="苏州">苏州</button><button class="filter-chip" data-filter="成都">成都</button>
+          <button class="filter-chip" data-filter="重庆">重庆</button><button class="filter-chip" data-filter="武汉">武汉</button>
+          <button class="filter-chip" data-filter="西安">西安</button><button class="filter-chip" data-filter="长沙">长沙</button>
+          <button class="filter-chip" data-filter="厦门">厦门</button><button class="filter-chip" data-filter="合肥">合肥</button>
+        </div>
+      </div>
+      <div class="store-count" id="store-count">共 79 家门店</div>
+      <div class="store-list" id="store-list"></div>
+    </aside>
+    <div class="map-wrap">
+      <div id="map"></div>
+      <div class="map-legend">
+        <div class="legend-dot"><span style="background:#5A7A4B"></span>九十葉</div>
+        <div class="legend-dot"><span style="background:#2C241E"></span>BLACKTREE</div>
+        <div class="legend-dot"><span style="background:#4A7A3B"></span>Matcha Wang</div>
+        <div class="legend-dot"><span style="background:#6BA3D6"></span>Yoajung</div>
+        <div class="legend-dot"><span style="background:#4A8C5C"></span>抹趣</div>
+        <div class="legend-dot"><span style="background:#C8B830"></span>lemonwell</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="site.js"></script>
+<script>
+// ─── Map Script (runs after site.js) ─────────────────────
+(function(){
+  const S=[
+    // 九十葉 28家
+    {n:'九十葉 · 淮海中路店',b:'九十葉',c:'上海',a:'上海市黄浦区淮海中路550号 HAI550 B1层',d:'近Matcha Wang旗舰店 · 抹茶冰淇淋热门打卡',la:31.2226,lo:121.4737},
+    {n:'九十葉 · 迪士尼小镇店',b:'九十葉',c:'上海',a:'上海市浦东新区申迪西路255弄 迪士尼小镇',d:'乐园主题店 · 限定款抹茶甜筒',la:31.1434,lo:121.6586},
+    {n:'九十葉 · 静安大悦城店',b:'九十葉',c:'上海',a:'上海市静安区西藏北路166号 静安大悦城南座B1',d:'地铁8/12号线曲阜路站',la:31.2462,lo:121.4680},
+    {n:'九十葉 · 嘉定宝龙广场店',b:'九十葉',c:'上海',a:'上海市嘉定区阿克苏路1099号 宝龙广场1F',d:'嘉定新城核心商圈',la:31.3440,lo:121.2560},
+    {n:'九十葉 · 上海环球港店',b:'九十葉',c:'上海',a:'上海市普陀区中山北路3300号 环球港B1',d:'地铁3/4/13号线金沙江路站',la:31.2362,lo:121.4121},
+    {n:'九十葉 · 上海万象城店',b:'九十葉',c:'上海',a:'上海市闵行区吴中路1599号 万象城B1',d:'地铁10号线紫藤路站',la:31.1755,lo:121.3690},
+    {n:'九十葉 · 北京朝阳大悦城店',b:'九十葉',c:'北京',a:'北京市朝阳区朝阳北路101号 朝阳大悦城B1',d:'地铁6号线青年路站',la:39.9236,lo:116.5172},
+    {n:'九十葉 · 北京西单大悦城店',b:'九十葉',c:'北京',a:'北京市西城区西单北大街131号 西单大悦城B1',d:'地铁1/4号线西单站',la:39.9120,lo:116.3738},
+    {n:'九十葉 · 北京国贸商城店',b:'九十葉',c:'北京',a:'北京市朝阳区建国门外大街1号 国贸商城B1',d:'地铁1/10号线国贸站',la:39.9087,lo:116.4605},
+    {n:'九十葉 · 深圳壹方天地店',b:'九十葉',c:'深圳',a:'深圳市宝安区新湖路99号 壹方天地B1',d:'地铁1/5号线宝安中心站',la:22.5570,lo:113.8820},
+    {n:'九十葉 · 深圳万象天地店',b:'九十葉',c:'深圳',a:'深圳市南山区深南大道9668号 万象天地B1',d:'地铁1号线高新园站',la:22.5370,lo:113.9534},
+    {n:'九十葉 · 深圳福田COCO Park店',b:'九十葉',c:'深圳',a:'深圳市福田区福华三路268号 COCO Park B1',d:'地铁1/3号线购物公园站',la:22.5345,lo:114.0590},
+    {n:'九十葉 · 广州白云万象汇店',b:'九十葉',c:'广州',a:'广州市白云区云城西路890号 白云万象汇B1',d:'地铁2号线白云公园站',la:23.1802,lo:113.2664},
+    {n:'九十葉 · 广州天河城店',b:'九十葉',c:'广州',a:'广州市天河区天河路208号 天河城B1',d:'地铁1/3号线体育西路站',la:23.1333,lo:113.3216},
+    {n:'九十葉 · 杭州湖滨银泰in77店',b:'九十葉',c:'杭州',a:'杭州市上城区延安路258号 湖滨银泰in77 B区B1',d:'西湖畔 · 地铁1号线龙翔桥站',la:30.2449,lo:120.1682},
+    {n:'九十葉 · 杭州万象城店',b:'九十葉',c:'杭州',a:'杭州市上城区富春路701号 万象城B1',d:'地铁4号线江锦路站',la:30.2477,lo:120.2178},
+    {n:'九十葉 · 南京德基广场店',b:'九十葉',c:'南京',a:'南京市玄武区中山路18号 德基广场B1',d:'新街口商圈 · 地铁1/2号线',la:32.0438,lo:118.7838},
+    {n:'九十葉 · 南京万象天地店',b:'九十葉',c:'南京',a:'南京市秦淮区中山南路666号 万象天地B1',d:'地铁1号线三山街站',la:32.0190,lo:118.7780},
+    {n:'九十葉 · 苏州中心店',b:'九十葉',c:'苏州',a:'苏州市工业园区苏绣路1号 苏州中心B1',d:'地铁1号线东方之门站',la:31.3172,lo:120.6711},
+    {n:'九十葉 · 苏州龙湖天街店',b:'九十葉',c:'苏州',a:'苏州市高新区塔园路181号 龙湖天街B1',d:'地铁1号线塔园路站',la:31.2950,lo:120.5550},
+    {n:'九十葉 · 成都IFS店',b:'九十葉',c:'成都',a:'成都市锦江区红星路三段1号 IFS国际金融中心B1',d:'地铁2/3号线春熙路站',la:30.6558,lo:104.0815},
+    {n:'九十葉 · 成都万象城店',b:'九十葉',c:'成都',a:'成都市成华区双庆路8号 万象城B1',d:'地铁4号线双桥路站',la:30.6520,lo:104.1120},
+    {n:'九十葉 · 重庆IFS店',b:'九十葉',c:'重庆',a:'重庆市江北区江北城北大街38号 IFS国金中心B1',d:'地铁6号线江北城站',la:29.5810,lo:106.5720},
+    {n:'九十葉 · 重庆万象城店',b:'九十葉',c:'重庆',a:'重庆市九龙坡区谢家湾正街55号 万象城B1',d:'地铁2号线谢家湾站',la:29.5210,lo:106.5170},
+    {n:'九十葉 · 武汉恒隆广场店',b:'九十葉',c:'武汉',a:'武汉市硚口区京汉大道668号 恒隆广场B1',d:'地铁1号线利济北路站',la:30.5820,lo:114.2660},
+    {n:'九十葉 · 武汉K11店',b:'九十葉',c:'武汉',a:'武汉市洪山区关山大道355号 K11 Select B1',d:'光谷核心商圈',la:30.5060,lo:114.4090},
+    {n:'九十葉 · 西安大悦城店',b:'九十葉',c:'西安',a:'西安市雁塔区慈恩西路66号 大悦城B1',d:'大雁塔商圈 · 地铁3/4号线',la:34.2180,lo:108.9590},
+    {n:'九十葉 · 西安赛格国际店',b:'九十葉',c:'西安',a:'西安市雁塔区长安中路123号 赛格国际B1',d:'小寨商圈 · 地铁2/3号线',la:34.2220,lo:108.9440},
+    {n:'九十葉 · 长沙IFS店',b:'九十葉',c:'长沙',a:'长沙市芙蓉区解放西路188号 IFS国金中心B1',d:'五一广场商圈 · 地铁1/2号线',la:28.1947,lo:112.9738},
+    {n:'九十葉 · 厦门万象城店',b:'九十葉',c:'厦门',a:'厦门市思明区湖滨东路99号 万象城B1',d:'地铁1号线湖滨东路站',la:24.4780,lo:118.0930},
+    {n:'九十葉 · 合肥万象城店',b:'九十葉',c:'合肥',a:'合肥市蜀山区潜山路111号 万象城B1',d:'政务区核心商圈',la:31.8230,lo:117.2300},
+    // BLACKTREE 12家
+    {n:'BLACKTREE · 深圳湾万象城旗舰店',b:'BLACKTREE',c:'深圳',a:'深圳市南山区科苑南路2888号 深圳湾万象城B1',d:'品牌首店 · 黑金概念空间',la:22.5177,lo:113.9454},
+    {n:'BLACKTREE · 南京德基广场店',b:'BLACKTREE',c:'南京',a:'南京市玄武区中山路18号 德基广场B1',d:'华东首店 · 新街口商圈',la:32.0438,lo:118.7838},
+    {n:'BLACKTREE · 长沙IFS国金街店',b:'BLACKTREE',c:'长沙',a:'长沙市芙蓉区解放西路188号 国金街A层',d:'华中首店 · 2026年2月开业',la:28.1947,lo:112.9738},
+    {n:'BLACKTREE · 上海青浦百联奥莱店',b:'BLACKTREE',c:'上海',a:'上海市青浦区沪青平公路2888号 百联奥特莱斯B区',d:'2026年5月开业',la:31.1530,lo:121.2180},
+    {n:'BLACKTREE · 上海新天地店',b:'BLACKTREE',c:'上海',a:'上海市黄浦区马当路245号 新天地时尚B1',d:'地铁10/13号线新天地站',la:31.2202,lo:121.4754},
+    {n:'BLACKTREE · 北京三里屯太古里店',b:'BLACKTREE',c:'北京',a:'北京市朝阳区三里屯路19号 太古里南区B1',d:'地铁10号线团结湖站',la:39.9334,lo:116.4553},
+    {n:'BLACKTREE · 北京朝阳大悦城店',b:'BLACKTREE',c:'北京',a:'北京市朝阳区朝阳北路101号 朝阳大悦城B1',d:'地铁6号线青年路站',la:39.9236,lo:116.5172},
+    {n:'BLACKTREE · 成都IFS店',b:'BLACKTREE',c:'成都',a:'成都市锦江区红星路三段1号 IFS B1',d:'地铁2/3号线春熙路站',la:30.6558,lo:104.0815},
+    {n:'BLACKTREE · 杭州万象城店',b:'BLACKTREE',c:'杭州',a:'杭州市上城区富春路701号 万象城B1',d:'地铁4号线江锦路站',la:30.2477,lo:120.2178},
+    {n:'BLACKTREE · 重庆IFS店',b:'BLACKTREE',c:'重庆',a:'重庆市江北区江北城北大街38号 IFS B1',d:'地铁6号线江北城站',la:29.5810,lo:106.5720},
+    {n:'BLACKTREE · 武汉K11店',b:'BLACKTREE',c:'武汉',a:'武汉市硚口区解放大道628号 K11 B1',d:'航空路商圈 · 地铁2号线',la:30.5820,lo:114.2640},
+    {n:'BLACKTREE · 广州太古汇店',b:'BLACKTREE',c:'广州',a:'广州市天河区天河路383号 太古汇B1',d:'地铁3号线石牌桥站',la:23.1345,lo:113.3308},
+    // Matcha Wang 1家
+    {n:'Matcha Wang · HAI550旗舰店',b:'Matcha Wang',c:'上海',a:'上海市黄浦区淮海中路550号 HAI550一层',d:'抹茶道场 · 招牌小羊莉莉 · 日客流900-1200人',la:31.2226,lo:121.4737},
+    // Yoajung 12家
+    {n:'Yoajung · 北京朝阳大悦城店',b:'Yoajung',c:'北京',a:'北京市朝阳区朝阳北路101号 朝阳大悦城B1',d:'地铁6号线青年路站',la:39.9236,lo:116.5172},
+    {n:'Yoajung · 北京三里屯太古里店',b:'Yoajung',c:'北京',a:'北京市朝阳区三里屯路19号 太古里南区B1',d:'地铁10号线团结湖站',la:39.9334,lo:116.4553},
+    {n:'Yoajung · 上海环球港店',b:'Yoajung',c:'上海',a:'上海市普陀区中山北路3300号 环球港B1',d:'地铁3/4/13号线金沙江路站',la:31.2362,lo:121.4121},
+    {n:'Yoajung · 上海新天地店',b:'Yoajung',c:'上海',a:'上海市黄浦区马当路245号 新天地时尚B1',d:'地铁10/13号线新天地站',la:31.2202,lo:121.4754},
+    {n:'Yoajung · 深圳壹方天地店',b:'Yoajung',c:'深圳',a:'深圳市宝安区新湖路99号 壹方天地B1',d:'地铁1/5号线宝安中心站',la:22.5570,lo:113.8820},
+    {n:'Yoajung · 深圳万象天地店',b:'Yoajung',c:'深圳',a:'深圳市南山区深南大道9668号 万象天地B1',d:'地铁1号线高新园站',la:22.5370,lo:113.9534},
+    {n:'Yoajung · 广州白云万象汇店',b:'Yoajung',c:'广州',a:'广州市白云区云城西路890号 白云万象汇B1',d:'地铁2号线白云公园站',la:23.1802,lo:113.2664},
+    {n:'Yoajung · 杭州万象城店',b:'Yoajung',c:'杭州',a:'杭州市上城区富春路701号 万象城B1',d:'地铁4号线江锦路站',la:30.2477,lo:120.2178},
+    {n:'Yoajung · 南京德基广场店',b:'Yoajung',c:'南京',a:'南京市玄武区中山路18号 德基广场B1',d:'地铁1/2号线新街口站',la:32.0438,lo:118.7838},
+    {n:'Yoajung · 成都IFS店',b:'Yoajung',c:'成都',a:'成都市锦江区红星路三段1号 IFS B1',d:'地铁2/3号线春熙路站',la:30.6558,lo:104.0815},
+    {n:'Yoajung · 苏州中心店',b:'Yoajung',c:'苏州',a:'苏州市工业园区苏绣路1号 苏州中心B1',d:'地铁1号线东方之门站',la:31.3172,lo:120.6711},
+    {n:'Yoajung · 武汉恒隆广场店',b:'Yoajung',c:'武汉',a:'武汉市硚口区京汉大道668号 恒隆广场B1',d:'地铁1号线利济北路站',la:30.5820,lo:114.2660},
+    // 抹趣 14家
+    {n:'抹趣 · 杭州湖滨银泰in77店',b:'抹趣',c:'杭州',a:'杭州市上城区延安路258号 湖滨银泰in77 B区B1',d:'西湖畔 · 地铁1号线龙翔桥站',la:30.2449,lo:120.1682},
+    {n:'抹趣 · 杭州万象城店',b:'抹趣',c:'杭州',a:'杭州市上城区富春路701号 万象城B1',d:'地铁4号线江锦路站',la:30.2477,lo:120.2178},
+    {n:'抹趣 · 苏州中心店',b:'抹趣',c:'苏州',a:'苏州市工业园区苏绣路1号 苏州中心B1',d:'地铁1号线东方之门站',la:31.3172,lo:120.6711},
+    {n:'抹趣 · 上海新天地店',b:'抹趣',c:'上海',a:'上海市黄浦区马当路245号 新天地时尚B1',d:'地铁10/13号线新天地站',la:31.2202,lo:121.4754},
+    {n:'抹趣 · 上海静安大悦城店',b:'抹趣',c:'上海',a:'上海市静安区西藏北路166号 静安大悦城南座B1',d:'地铁8/12号线曲阜路站',la:31.2462,lo:121.4680},
+    {n:'抹趣 · 北京三里屯太古里店',b:'抹趣',c:'北京',a:'北京市朝阳区三里屯路19号 太古里南区B1',d:'地铁10号线团结湖站',la:39.9334,lo:116.4553},
+    {n:'抹趣 · 北京朝阳大悦城店',b:'抹趣',c:'北京',a:'北京市朝阳区朝阳北路101号 朝阳大悦城B1',d:'地铁6号线青年路站',la:39.9236,lo:116.5172},
+    {n:'抹趣 · 广州天河城店',b:'抹趣',c:'广州',a:'广州市天河区天河路208号 天河城B1',d:'地铁1/3号线体育西路站',la:23.1333,lo:113.3216},
+    {n:'抹趣 · 广州太古汇店',b:'抹趣',c:'广州',a:'广州市天河区天河路383号 太古汇B1',d:'地铁3号线石牌桥站',la:23.1345,lo:113.3308},
+    {n:'抹趣 · 深圳万象天地店',b:'抹趣',c:'深圳',a:'深圳市南山区深南大道9668号 万象天地B1',d:'地铁1号线高新园站',la:22.5370,lo:113.9534},
+    {n:'抹趣 · 南京德基广场店',b:'抹趣',c:'南京',a:'南京市玄武区中山路18号 德基广场B1',d:'地铁1/2号线新街口站',la:32.0438,lo:118.7838},
+    {n:'抹趣 · 成都IFS店',b:'抹趣',c:'成都',a:'成都市锦江区红星路三段1号 IFS B1',d:'地铁2/3号线春熙路站',la:30.6558,lo:104.0815},
+    {n:'抹趣 · 武汉K11店',b:'抹趣',c:'武汉',a:'武汉市洪山区关山大道355号 K11 Select B1',d:'光谷核心商圈',la:30.5060,lo:114.4090},
+    {n:'抹趣 · 西安大悦城店',b:'抹趣',c:'西安',a:'西安市雁塔区慈恩西路66号 大悦城B1',d:'大雁塔商圈 · 地铁3/4号线',la:34.2180,lo:108.9590},
+    // lemonwell 11家
+    {n:'lemonwell · 上海静安嘉里中心店',b:'lemonwell',c:'上海',a:'上海市静安区南京西路1515号 静安嘉里中心B1',d:'地铁2/7号线静安寺站',la:31.2264,lo:121.4469},
+    {n:'lemonwell · 上海新天地店',b:'lemonwell',c:'上海',a:'上海市黄浦区马当路245号 新天地时尚B1',d:'地铁10/13号线新天地站',la:31.2202,lo:121.4754},
+    {n:'lemonwell · 杭州万象城店',b:'lemonwell',c:'杭州',a:'杭州市上城区富春路701号 万象城B1',d:'地铁4号线江锦路站',la:30.2477,lo:120.2178},
+    {n:'lemonwell · 杭州湖滨银泰in77店',b:'lemonwell',c:'杭州',a:'杭州市上城区延安路258号 湖滨银泰in77 B区B1',d:'西湖畔 · 地铁1号线龙翔桥站',la:30.2449,lo:120.1682},
+    {n:'lemonwell · 深圳万象天地店',b:'lemonwell',c:'深圳',a:'深圳市南山区深南大道9668号 万象天地B1',d:'地铁1号线高新园站',la:22.5370,lo:113.9534},
+    {n:'lemonwell · 北京国贸商城店',b:'lemonwell',c:'北京',a:'北京市朝阳区建国门外大街1号 国贸商城B1',d:'地铁1/10号线国贸站',la:39.9087,lo:116.4605},
+    {n:'lemonwell · 北京三里屯太古里店',b:'lemonwell',c:'北京',a:'北京市朝阳区三里屯路19号 太古里南区B1',d:'地铁10号线团结湖站',la:39.9334,lo:116.4553},
+    {n:'lemonwell · 广州太古汇店',b:'lemonwell',c:'广州',a:'广州市天河区天河路383号 太古汇B1',d:'地铁3号线石牌桥站',la:23.1345,lo:113.3308},
+    {n:'lemonwell · 苏州中心店',b:'lemonwell',c:'苏州',a:'苏州市工业园区苏绣路1号 苏州中心B1',d:'地铁1号线东方之门站',la:31.3172,lo:120.6711},
+    {n:'lemonwell · 成都IFS店',b:'lemonwell',c:'成都',a:'成都市锦江区红星路三段1号 IFS B1',d:'地铁2/3号线春熙路站',la:30.6558,lo:104.0815},
+    {n:'lemonwell · 南京德基广场店',b:'lemonwell',c:'南京',a:'南京市玄武区中山路18号 德基广场B1',d:'地铁1/2号线新街口站',la:32.0438,lo:118.7838},
+  ];
+
+  const brandColors={'九十葉':'#5A7A4B','BLACKTREE':'#2C241E','Matcha Wang':'#4A7A3B','Yoajung':'#6BA3D6','抹趣':'#4A8C5C','lemonwell':'#C8B830'};
+  let activeBrand='all',activeCity='all',map,markers=[];
+
+  function initMap(){
+    // Wait for container to have dimensions
+    var container=document.getElementById('map');
+    if(!container||container.offsetHeight===0){setTimeout(initMap,100);return}
+
+    map=L.map('map',{
+      zoomControl:true,
+      scrollWheelZoom:true
+    }).setView([32.0,116.0],6);
+
+    // Use OpenStreetMap tiles (guaranteed to work)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      attribution:'&copy; OpenStreetMap contributors',
+      maxZoom:19
+    }).addTo(map);
+
+    renderStores();
+  }
+
+  function renderStores(){
+    markers.forEach(function(m){map.removeLayer(m)});markers=[];
+    var filtered=S.filter(function(s){return(activeBrand==='all'||s.b===activeBrand)&&(activeCity==='all'||s.c===activeCity)});
+
+    var list=document.getElementById('store-list');
+    list.innerHTML=filtered.map(function(s,i){return'<div class="store-card" data-i="'+i+'" onclick="window._focusStore('+i+')"><span class="brand-tag" style="background:'+brandColors[s.b]+'">'+s.b+'</span><h4>'+s.n+'</h4><p>'+s.a+'</p><div class="store-detail">'+s.d+'</div></div>'}).join('');
+
+    document.getElementById('store-count').textContent='共 '+filtered.length+' 家门店';
+
+    var bounds=[];
+    filtered.forEach(function(s){
+      var m=L.marker([s.la,s.lo],{
+        icon:L.divIcon({className:'',html:'<div style="width:16px;height:16px;border-radius:50%;background:'+brandColors[s.b]+';border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3)"></div>',iconSize:[16,16],iconAnchor:[8,8]})
+      }).addTo(map);
+      m.bindPopup('<div style="font-family:-apple-system,BlinkMacSystemFont,PingFang SC,sans-serif;font-size:13px;line-height:1.5"><strong style="font-size:14px">'+s.n+'</strong><br>'+s.a+'<br><span style="color:#86868B;font-size:11px">'+s.d+'</span></div>');
+      markers.push(m);bounds.push([s.la,s.lo]);
+    });
+
+    if(bounds.length)map.flyToBounds(bounds,{padding:[50,50],maxZoom:13,duration:1});
+  }
+
+  window._focusStore=function(idx){
+    var filtered=S.filter(function(s){return(activeBrand==='all'||s.b===activeBrand)&&(activeCity==='all'||s.c===activeCity)});
+    if(idx>=0&&idx<filtered.length){
+      var s=filtered[idx];
+      map.flyTo([s.la,s.lo],16,{duration:.8});
+      var cards=document.querySelectorAll('.store-card');
+      cards.forEach(function(c){c.classList.remove('active')});
+      if(cards[idx]){cards[idx].classList.add('active');cards[idx].scrollIntoView({behavior:'smooth',block:'nearest'})}
+    }
+  };
+
+  function setupFilters(id,setter){
+    document.getElementById(id).addEventListener('click',function(e){
+      var chip=e.target.closest('.filter-chip');if(!chip)return;
+      var btns=document.querySelectorAll('#'+id+' .filter-chip');
+      for(var i=0;i<btns.length;i++)btns[i].classList.remove('active');
+      chip.classList.add('active');setter(chip.dataset.filter);renderStores();
+    });
+  }
+
+  // Start when DOM is ready, after site.js has run
+  if(document.readyState==='complete'){initMap()}else{window.addEventListener('load',initMap)}
+  setupFilters('brand-filters',function(v){activeBrand=v});
+  setupFilters('city-filters',function(v){activeCity=v});
+})();
+</script>
+</body>
+</html>
