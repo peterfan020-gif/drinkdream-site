@@ -14,10 +14,15 @@
 <!-- Cursor Glow -->
 <div class="cursor-glow" id="cursor-glow"></div>
 
-<!-- Progress Ring Nav -->
+<!-- Progress Bar -->
+<div class="progress-bar" id="progress-bar"></div>
+
+<!-- Ring Nav -->
 <nav class="ring-nav" id="ring-nav">
-  <div class="ring-progress"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="rgba(0,0,0,.1)" stroke-width="1.5"/><circle cx="20" cy="20" r="17" fill="none" stroke="#111" stroke-width="1.5" stroke-dasharray="106.8" stroke-dashoffset="106.8" id="ring-fill" stroke-linecap="round"/></svg></div>
-  <a href="#stack-jiushiye" class="ring-dot active" data-label="九十葉" style="--dot:#5A7A4B"></a>
+  <div class="ring-track">
+    <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="1.2"/><circle cx="20" cy="20" r="17" fill="none" stroke="#1D1D1F" stroke-width="1.2" stroke-dasharray="106.8" stroke-dashoffset="106.8" id="ring-fill" stroke-linecap="round"/></svg>
+  </div>
+  <a href="#stack-jiushiye" class="ring-dot" data-label="九十葉" style="--dot:#5A7A4B"></a>
   <a href="#stack-blacktree" class="ring-dot" data-label="BLACKTREE" style="--dot:#2C241E"></a>
   <a href="#stack-matcha" class="ring-dot" data-label="Matcha Wang" style="--dot:#4A7A3B"></a>
   <a href="#stack-yoajung" class="ring-dot" data-label="Yoajung" style="--dot:#7BAFD4"></a>
@@ -52,52 +57,14 @@
         <span class="hero-line">DRINK</span>
         <span class="hero-line">DREAM</span>
       </h1>
-      <p class="hero-sub" data-reveal>从一杯茶到多品牌矩阵，持续解构与重塑</p>
+      <p class="hero-sub" data-reveal>从一杯茶到多品牌矩阵</p>
     </div>
     <div class="hero-scroll-indicator">
-      <div class="scroll-line"></div>
+      <div class="scroll-arrow"></div>
     </div>
   </section>
 
-  <!-- ═══════ 集团宣言 ═══════ -->
-  <section class="manifesto-section" id="manifesto">
-    <div class="manifesto-inner">
-      <div class="manifesto-item" data-reveal>
-        <span class="m-num">01</span>
-        <h2>DRINKDREAM, From Shanghai.</h2>
-        <p>2025年成立于上海，整合品牌孵化、投资、代理、经营、管理于一体的综合服务型集团。</p>
-      </div>
-      <div class="manifesto-item" data-reveal>
-        <span class="m-num">02</span>
-        <h2>它诞生于对司空见惯的「饮用」行为的彻底反叛</h2>
-        <p>Born from a radical rebellion against the mundane act of drinking.</p>
-      </div>
-      <div class="manifesto-item" data-reveal>
-        <span class="m-num">03</span>
-        <h2>根植于——Tea、Ice Cream、Gelato、Coffee</h2>
-        <p>Rooted in the craft of fresh beverages.</p>
-      </div>
-      <div class="manifesto-item" data-reveal>
-        <span class="m-num">04</span>
-        <h2>从一杯茶到多品牌矩阵，持续解构与重塑</h2>
-        <p>From one cup to many brands, exploring all directions.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════ 集团介绍 ═══════ -->
-  <section class="intro-section" id="intro">
-    <div class="intro-content" data-reveal>
-      <p class="section-label">GROUP INTRODUCTION</p>
-      <h2>我们不只创造品牌，我们在定义新式现制饮的未来图景</h2>
-      <div class="intro-text">
-        <p>DrinkDream饮之梦品牌管理公司，旗下孵化九十叶、Black Tree、泰柯茶园、抹趣、Matcha Wang 等多家连锁轻餐品牌，现已布局北京、上海、深圳、杭州、苏州、广州等国内多个一线、新一线城市核心商圈。</p>
-        <p>我们构建了从产品灵感、品牌战略、营销增长到供应链及资本运作的完整赋能体系，将每一个创意火花系统性地淬炼为具备长期生命力的商业品牌。</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════ 品牌堆叠区 ═══════ -->
+  <!-- ═══════ 品牌堆叠 ═══════ -->
   <div class="stack-container" id="stack-container">
 
     <!-- 九十葉 -->
@@ -107,21 +74,20 @@
           <div class="stack-image-wrapper">
             <div class="stack-image" style="background-image:url('images/jiushiye_hero.jpg')"></div>
           </div>
+          <div class="stack-glow" style="--glow:rgba(90,122,75,.12)"></div>
         </div>
         <div class="stack-info">
-          <div class="stack-inner">
-            <span class="stack-num">01</span>
-            <h2 class="stack-name">九十葉</h2>
-            <p class="stack-en">NINTEA MATCHA</p>
-            <div class="stack-line"></div>
-            <p class="stack-desc">专注东方抹茶，延续千年茶韵。一抹茶，还原自然的纯粹。回归自然、享受纯粹、品味东方。</p>
-            <div class="stack-stats">
-              <div class="stat"><strong data-count="50">0</strong><span>门店</span></div>
-              <div class="stat"><strong data-count="6">0</strong><span>城市</span></div>
-              <div class="stat"><strong>2024</strong><span>创立</span></div>
-            </div>
-            <a class="stack-cta magnetic" href="jiushiye.html">探索九十葉 <span>→</span></a>
+          <span class="stack-num">01</span>
+          <h2 class="stack-name">九十葉</h2>
+          <p class="stack-en">NINTEA MATCHA</p>
+          <div class="stack-line"></div>
+          <p class="stack-desc">专注东方抹茶，延续千年茶韵。回归自然、享受纯粹、品味东方。</p>
+          <div class="stack-stats">
+            <div class="stat"><strong data-count="50">0</strong><span>门店</span></div>
+            <div class="stat"><strong data-count="6">0</strong><span>城市</span></div>
+            <div class="stat"><strong>2024</strong><span>创立</span></div>
           </div>
+          <a class="stack-cta" href="jiushiye.html">探索九十葉 <span class="arrow">→</span></a>
         </div>
       </div>
     </section>
@@ -133,21 +99,20 @@
           <div class="stack-image-wrapper">
             <div class="stack-image" style="background-image:url('images/blacktree_hero.jpg')"></div>
           </div>
+          <div class="stack-glow" style="--glow:rgba(44,36,30,.1)"></div>
         </div>
         <div class="stack-info">
-          <div class="stack-inner">
-            <span class="stack-num">02</span>
-            <h2 class="stack-name">BLACKTREE</h2>
-            <p class="stack-en">泰茶 / 泰可可</p>
-            <div class="stack-line"></div>
-            <p class="stack-desc">理性结构 · 亲生命性 · 灵感生长。都市与自然交汇处的一棵灵感之树，传递泰国茶文化的悠闲与精致。</p>
-            <div class="stack-stats">
-              <div class="stat"><strong data-count="30">0</strong><span>门店</span></div>
-              <div class="stat"><strong data-count="5">0</strong><span>城市</span></div>
-              <div class="stat"><strong>2025</strong><span>创立</span></div>
-            </div>
-            <a class="stack-cta magnetic" href="blacktree.html">探索 BLACKTREE <span>→</span></a>
+          <span class="stack-num">02</span>
+          <h2 class="stack-name">BLACKTREE</h2>
+          <p class="stack-en">泰茶 / 泰可可</p>
+          <div class="stack-line"></div>
+          <p class="stack-desc">理性结构 · 亲生命性。都市与自然交汇处的一棵灵感之树。</p>
+          <div class="stack-stats">
+            <div class="stat"><strong data-count="30">0</strong><span>门店</span></div>
+            <div class="stat"><strong data-count="5">0</strong><span>城市</span></div>
+            <div class="stat"><strong>2025</strong><span>创立</span></div>
           </div>
+          <a class="stack-cta" href="blacktree.html">探索 BLACKTREE <span class="arrow">→</span></a>
         </div>
       </div>
     </section>
@@ -159,21 +124,20 @@
           <div class="stack-image-wrapper">
             <div class="stack-image" style="background-image:url('images/matchawang_hero.jpg')"></div>
           </div>
+          <div class="stack-glow" style="--glow:rgba(74,122,59,.12)"></div>
         </div>
         <div class="stack-info">
-          <div class="stack-inner">
-            <span class="stack-num">03</span>
-            <h2 class="stack-name">Matcha Wang</h2>
-            <p class="stack-en">Nothing but matcha.</p>
-            <div class="stack-line"></div>
-            <p class="stack-desc">回到抹茶本身，展现纯粹风味与深邃层次。以砾石、钢板与混凝土构筑抹茶道场，完成味觉修行。</p>
-            <div class="stack-stats">
-              <div class="stat"><strong data-count="15">0</strong><span>门店</span></div>
-              <div class="stat"><strong data-count="4">0</strong><span>城市</span></div>
-              <div class="stat"><strong>2025</strong><span>创立</span></div>
-            </div>
-            <a class="stack-cta magnetic" href="matcha-wang.html">探索 Matcha Wang <span>→</span></a>
+          <span class="stack-num">03</span>
+          <h2 class="stack-name">Matcha Wang</h2>
+          <p class="stack-en">Nothing but matcha.</p>
+          <div class="stack-line"></div>
+          <p class="stack-desc">回到抹茶本身，展现纯粹风味。以砾石与钢板构筑抹茶道场。</p>
+          <div class="stack-stats">
+            <div class="stat"><strong data-count="15">0</strong><span>门店</span></div>
+            <div class="stat"><strong data-count="4">0</strong><span>城市</span></div>
+            <div class="stat"><strong>2025</strong><span>创立</span></div>
           </div>
+          <a class="stack-cta" href="matcha-wang.html">探索 Matcha Wang <span class="arrow">→</span></a>
         </div>
       </div>
     </section>
@@ -185,21 +149,20 @@
           <div class="stack-image-wrapper">
             <div class="stack-image" style="background-image:url('images/yoajung_hero.jpg')"></div>
           </div>
+          <div class="stack-glow" style="--glow:rgba(123,175,212,.12)"></div>
         </div>
         <div class="stack-info">
-          <div class="stack-inner">
-            <span class="stack-num">04</span>
-            <h2 class="stack-name">Yoajung</h2>
-            <p class="stack-en">优格家 · 酸奶冰淇淋的正统</p>
-            <div class="stack-line"></div>
-            <p class="stack-desc">每一杯 Yoajung 都是可以自己定义的小宇宙。Less Sugar, More You。为 DRINKDREAM 接驳世界。</p>
-            <div class="stack-stats">
-              <div class="stat"><strong data-count="20">0</strong><span>门店</span></div>
-              <div class="stat"><strong data-count="4">0</strong><span>城市</span></div>
-              <div class="stat"><strong>2024</strong><span>引入</span></div>
-            </div>
-            <a class="stack-cta magnetic" href="yoajung.html">探索 Yoajung <span>→</span></a>
+          <span class="stack-num">04</span>
+          <h2 class="stack-name">Yoajung</h2>
+          <p class="stack-en">优格家 · 酸奶冰淇淋的正统</p>
+          <div class="stack-line"></div>
+          <p class="stack-desc">每一杯都是可以自己定义的小宇宙。Less Sugar, More You.</p>
+          <div class="stack-stats">
+            <div class="stat"><strong data-count="20">0</strong><span>门店</span></div>
+            <div class="stat"><strong data-count="4">0</strong><span>城市</span></div>
+            <div class="stat"><strong>2024</strong><span>引入</span></div>
           </div>
+          <a class="stack-cta" href="yoajung.html">探索 Yoajung <span class="arrow">→</span></a>
         </div>
       </div>
     </section>
@@ -211,21 +174,20 @@
           <div class="stack-image-wrapper">
             <div class="stack-image" style="background-image:url('images/moqu_hero.jpg')"></div>
           </div>
+          <div class="stack-glow" style="--glow:rgba(90,156,92,.12)"></div>
         </div>
         <div class="stack-info">
-          <div class="stack-inner">
-            <span class="stack-num">05</span>
-            <h2 class="stack-name">抹趣</h2>
-            <p class="stack-en">Very Matcha</p>
-            <div class="stack-line"></div>
-            <p class="stack-desc">抹茶酱饮首创者。百倍茶汤只取一抹精华，甄选早春明前茶，执着于探索抹茶与世间万物碰撞的无限可能。</p>
-            <div class="stack-stats">
-              <div class="stat"><strong data-count="25">0</strong><span>门店</span></div>
-              <div class="stat"><strong data-count="5">0</strong><span>城市</span></div>
-              <div class="stat"><strong>2024</strong><span>创立</span></div>
-            </div>
-            <a class="stack-cta magnetic" href="moqu.html">探索抹趣 <span>→</span></a>
+          <span class="stack-num">05</span>
+          <h2 class="stack-name">抹趣</h2>
+          <p class="stack-en">Very Matcha</p>
+          <div class="stack-line"></div>
+          <p class="stack-desc">抹茶酱饮首创者。甄选早春明前茶，探索抹茶与万物的碰撞。</p>
+          <div class="stack-stats">
+            <div class="stat"><strong data-count="25">0</strong><span>门店</span></div>
+            <div class="stat"><strong data-count="5">0</strong><span>城市</span></div>
+            <div class="stat"><strong>2024</strong><span>创立</span></div>
           </div>
+          <a class="stack-cta" href="moqu.html">探索抹趣 <span class="arrow">→</span></a>
         </div>
       </div>
     </section>
@@ -237,90 +199,32 @@
           <div class="stack-image-wrapper">
             <div class="stack-image" style="background-image:url('images/lemonwell_hero.jpg')"></div>
           </div>
+          <div class="stack-glow" style="--glow:rgba(212,192,64,.12)"></div>
         </div>
         <div class="stack-info">
-          <div class="stack-inner">
-            <span class="stack-num">06</span>
-            <h2 class="stack-name">lemonwell</h2>
-            <p class="stack-en">柠檬茶 & Gelato</p>
-            <div class="stack-line"></div>
-            <p class="stack-desc">都市里的柠檬岛，献给美丽灵魂的诗意栖居。循着柠檬香气，构筑一处让感官苏醒的岛屿时光。</p>
-            <div class="stack-stats">
-              <div class="stat"><strong data-count="5">0</strong><span>门店</span></div>
-              <div class="stat"><strong data-count="2">0</strong><span>城市</span></div>
-              <div class="stat"><strong>2026</strong><span>创立</span></div>
-            </div>
-            <a class="stack-cta magnetic" href="lemonwell.html">探索 lemonwell <span>→</span></a>
+          <span class="stack-num">06</span>
+          <h2 class="stack-name">lemonwell</h2>
+          <p class="stack-en">柠檬茶 & Gelato</p>
+          <div class="stack-line"></div>
+          <p class="stack-desc">都市里的柠檬岛，献给美丽灵魂的诗意栖居。感官苏醒·心神靠岸。</p>
+          <div class="stack-stats">
+            <div class="stat"><strong data-count="5">0</strong><span>门店</span></div>
+            <div class="stat"><strong data-count="2">0</strong><span>城市</span></div>
+            <div class="stat"><strong>2026</strong><span>创立</span></div>
           </div>
+          <a class="stack-cta" href="lemonwell.html">探索 lemonwell <span class="arrow">→</span></a>
         </div>
       </div>
     </section>
 
   </div>
 
-  <!-- ═══════ Metrics ═══════ -->
-  <section class="metrics-strip">
-    <div class="metric-item" data-reveal><span>深耕甜品市场</span><strong data-count="10">0</strong><em>年</em></div>
-    <div class="metric-item" data-reveal><span>直营门店超过</span><strong data-count="200">0</strong><em>家</em></div>
-    <div class="metric-item" data-reveal><span>门店总营收</span><strong data-count="10">0</strong><em>亿</em></div>
-    <div class="metric-item" data-reveal><span>特许经营门店</span><strong data-count="500">0</strong><em>家</em></div>
-    <div class="metric-item" data-reveal><span>管理人员超</span><strong data-count="800">0</strong><em>人</em></div>
-  </section>
-
-  <!-- ═══════ 核心价值观 ═══════ -->
-  <section class="values-section">
-    <p class="section-label" data-reveal>CORE VALUES</p>
-    <h2 class="values-title" data-reveal>核心价值观</h2>
-    <div class="values-grid">
-      <div class="value-card" data-reveal><span class="vc-icon">✦</span><h3>创新</h3><p>构建从产品灵感到商业品牌的完整赋能体系</p></div>
-      <div class="value-card" data-reveal><span class="vc-icon">⚡</span><h3>快</h3><p>以闪电路径覆盖市场，持续锻造尖刀品牌</p></div>
-      <div class="value-card" data-reveal><span class="vc-icon">◆</span><h3>卓越</h3><p>超越峰值，创造记忆。定义高品质餐饮新体验</p></div>
-      <div class="value-card" data-reveal><span class="vc-icon">◎</span><h3>分享</h3><p>与超级合伙人构建共生根系统，为顶尖人才提供舞台</p></div>
-    </div>
-  </section>
-
-  <!-- ═══════ 媒体报道 ═══════ -->
-  <section class="media-section">
-    <p class="section-label" data-reveal>MEDIA COVERAGE</p>
-    <h2 class="values-title" data-reveal>媒体报道</h2>
-    <div class="media-grid">
-      <a href="https://www.qlwb.com.cn/detail/27465739.html" target="_blank" rel="noopener" class="media-card" data-reveal>
-        <span class="media-source">齐鲁晚报 · 央广网</span>
-        <h3>外国游客自发"种草"，上海如何接住流量？</h3>
-        <p>淮海路Matcha Wang门店前排起长队，"小羊抹茶"成为外国游客来沪必打卡的"社交货币"。</p>
-        <span class="media-link">阅读全文 →</span>
-      </a>
-      <a href="http://cn.chinadaily.com.cn/a/202604/08/WS69d61aa5a310942cc49a6d38.html" target="_blank" rel="noopener" class="media-card" data-reveal>
-        <span class="media-source">中国日报</span>
-        <h3>抹茶新体验：老外在沪排队"杀羊"</h3>
-        <p>上海Matcha Wang抹茶店前，外国游客长时间排队，只为完成"杀羊计划"——一口吞掉抹茶拿铁上的小羊奶泡。</p>
-        <span class="media-link">阅读全文 →</span>
-      </a>
-      <a href="https://m.bjnews.com.cn/detail/1775889676129806.html" target="_blank" rel="noopener" class="media-card" data-reveal>
-        <span class="media-source">新京报</span>
-        <h3>Drink Dream：从一杯茶的"叛逆"开始</h3>
-        <p>诞生于上海，深根现制饮品赛道超十年。重构都市人的味觉想象，把想象力装进杯子里。</p>
-        <span class="media-link">阅读全文 →</span>
-      </a>
-      <a href="https://caifuhao.eastmoney.com/news/20260527074920963955460" target="_blank" rel="noopener" class="media-card" data-reveal>
-        <span class="media-source">界面新闻 · 东方财富</span>
-        <h3>操盘九十葉等网红店的饮之梦集团是谁？</h3>
-        <p>深度解密饮之梦集团的品牌孵化方法论与快速扩张背后的流量打法。</p>
-        <span class="media-link">阅读全文 →</span>
-      </a>
-      <a href="https://new.qq.com/rain/a/20260708A04AVY00" target="_blank" rel="noopener" class="media-card" data-reveal>
-        <span class="media-source">腾讯新闻</span>
-        <h3>抹茶翻红，国产当道</h3>
-        <p>抹茶从小众猎奇变成大众熟悉的风味，九十葉复购率达65%，核心用户月均复购3次以上。</p>
-        <span class="media-link">阅读全文 →</span>
-      </a>
-      <a href="https://caifuhao.eastmoney.com/news/20260512104750637726480" target="_blank" rel="noopener" class="media-card" data-reveal>
-        <span class="media-source">东方财富</span>
-        <h3>抹茶火遍餐饮圈，中国产区只赚个辛苦钱？</h3>
-        <p>深入分析抹茶产业链：消费端火爆背后，饮之梦等头部孵化器如何抓住品类红利。</p>
-        <span class="media-link">阅读全文 →</span>
-      </a>
-    </div>
+  <!-- ═══════ Bridge ═══════ -->
+  <section class="bridge-section" data-reveal>
+    <p class="bridge-label">了解更多</p>
+    <h2 class="bridge-title">关于 DRINKDREAM 集团</h2>
+    <p class="bridge-desc">从一杯茶到多品牌矩阵，了解我们的品牌哲学与集团故事。</p>
+    <a class="bridge-cta" href="about.html">了解更多 <span class="arrow">→</span></a>
   </section>
 
 </main>
@@ -330,7 +234,7 @@
     <div class="footer-logo"><img src="https://www.drink-dream.com/images/logo-drinkdream.png" alt="DRINK DREAM"></div>
     <div class="footer-links">
       <div class="footer-col"><strong>品牌</strong><a href="jiushiye.html">九十葉</a><a href="blacktree.html">BLACKTREE</a><a href="matcha-wang.html">Matcha Wang</a><a href="yoajung.html">Yoajung</a><a href="moqu.html">抹趣</a><a href="lemonwell.html">lemonwell</a></div>
-      <div class="footer-col"><strong>集团</strong><a href="about.html">关于我们</a><a href="#">加入我们</a></div>
+      <div class="footer-col"><strong>集团</strong><a href="about.html">关于我们</a><a href="find-us.html">寻找我们</a><a href="#">加入我们</a></div>
       <div class="footer-col"><strong>联系</strong><a href="#">媒体联络</a><a href="#">商务合作</a></div>
     </div>
     <p class="footer-copy">&copy; 2025 DRINKDREAM. All rights reserved.</p>
