@@ -495,6 +495,25 @@ function initMobileMenu(){
   document.addEventListener('click',e=>{if(!tb.contains(e.target)&&!nv.contains(e.target))nv.classList.remove('open')});
 }
 
+// ─── Nav Dropdown ───────────────────────────────────────
+function initNavDropdown(){
+  const dropdowns=document.querySelectorAll('.nav-dropdown');
+  dropdowns.forEach(dd=>{
+    const toggle=dd.querySelector('.nav-dropdown-toggle');
+    toggle.addEventListener('click',e=>{
+      e.stopPropagation();e.preventDefault();
+      const wasOpen=dd.classList.contains('open');
+      // Close ALL dropdowns first
+      dropdowns.forEach(d=>d.classList.remove('open'));
+      // Then toggle current (open if was closed, close if was open)
+      if(!wasOpen)dd.classList.add('open');
+    });
+  });
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.nav-dropdown'))dropdowns.forEach(dd=>dd.classList.remove('open'));
+  });
+}
+
 // ─── Copy Protection ────────────────────────────────────
 function initProtection(){
   document.addEventListener('contextmenu',e=>e.preventDefault());
@@ -503,13 +522,65 @@ function initProtection(){
   document.addEventListener('selectstart',e=>e.preventDefault());
 }
 
+// ─── Flip Cards ──────────────────────────────────────────
+function initFlipCards(){
+  const cards=document.querySelectorAll('.flip-card');if(!cards.length)return;
+
+  // Prevent CTA clicks from triggering flip
+  document.querySelectorAll('.flip-cta').forEach(cta=>{
+    cta.addEventListener('click',e=>{
+      e.stopPropagation(); // Don't bubble to card
+    });
+  });
+
+  cards.forEach(card=>{
+    card.addEventListener('click',function(e){
+      // Don't flip if clicking CTA or nearby
+      if(e.target.closest('.flip-cta'))return;
+      // Check if click is within 20px of a flip-cta (safe zone)
+      const ctas=this.querySelectorAll('.flip-cta');
+      for(const cta of ctas){
+        const cr=cta.getBoundingClientRect();
+        const pad=16; // safety margin in px
+        if(e.clientX>=cr.left-pad && e.clientX<=cr.right+pad && e.clientY>=cr.top-pad && e.clientY<=cr.bottom+pad)return;
+      }
+      // Ripple effect
+      const ripple=document.createElement('span');ripple.className='ripple';
+      const r=this.getBoundingClientRect();
+      ripple.style.left=(e.clientX-r.left)+'px';ripple.style.top=(e.clientY-r.top)+'px';
+      ripple.style.width=ripple.style.height=r.width+'px';
+      this.appendChild(ripple);
+      setTimeout(()=>ripple.remove(),600);
+      // Flip
+      this.classList.toggle('flipped');
+    });
+  });
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.flip-card'))cards.forEach(c=>c.classList.remove('flipped'));
+  });
+}
+
+// ─── Hero Parallax ──────────────────────────────────────
+function initHeroParallax(){
+  const hero=document.querySelector('.about-hero');
+  if(!hero)return;
+  let tick=false;
+  window.addEventListener('scroll',()=>{
+    if(!tick){requestAnimationFrame(()=>{
+      const s=window.scrollY;if(s>window.innerHeight*.8)return;
+      hero.style.backgroundPositionY=(-s*.15)+'px';
+      tick=false;
+    });tick=true}
+  },{passive:true});
+}
+
 // ═══════ INIT ═══════
 function init(){
   initProtection();initLangSwitcher();applyLang();
-  initHeroReveal();initScrollReveal();
+  initHeroReveal();initHeroParallax();initScrollReveal();
   initProgressBar();initHeader();initCursorGlow();
   initStackObserver();initStackTilt();initMagnetic();initParallax();
-  initCounters();initBackToTop();initMobileMenu();
+  initFlipCards();initCounters();initBackToTop();initMobileMenu();initNavDropdown();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
