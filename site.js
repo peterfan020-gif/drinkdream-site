@@ -6,7 +6,8 @@
 // ─── Language Data ──────────────────────────────────────
 const L={
   zh:{
-    'nav.brands':'品牌矩阵','nav.about':'关于我们','nav.find':'寻找我们','nav.join':'加入我们',
+    'nav.home':'首页','nav.about':'关于我们','nav.brands':'旗下品牌','nav.find':'寻找我们','nav.join':'加入我们',
+    'nav.stores':'门店地址','nav.media':'媒体联系',
     'back':'回到顶部','back.brands':'← 返回品牌矩阵',
     'hero.eyebrow':'品牌生态系统','hero.sub':'从一杯茶到多品牌矩阵',
     'hero.cta':'了解集团',
@@ -113,7 +114,8 @@ const L={
 // Add zh-TW and en by copying zh and overriding
 const zh=L.zh;
 L['zh-TW']=Object.assign({},zh,{
-  'nav.brands':'品牌矩陣','nav.about':'關於我們','nav.find':'尋找我們','nav.join':'加入我們',
+  'nav.home':'首頁','nav.about':'關於我們','nav.brands':'旗下品牌','nav.find':'尋找我們','nav.join':'加入我們',
+  'nav.stores':'門市地址','nav.media':'媒體聯繫',
   'back':'回到頂部','back.brands':'← 返回品牌矩陣',
   'hero.eyebrow':'品牌生態系統','hero.sub':'從一杯茶到多品牌矩陣','hero.cta':'了解更多',
   'intro.label':'集團介紹','intro.title':'我們不只創造品牌，我們在定義新式現製飲的未來圖景',
@@ -137,7 +139,8 @@ L['zh-TW']=Object.assign({},zh,{
   'find.title':'尋找我們','find.sub':'探索 DRINKDREAM 全國門市 · Explore our stores nationwide','find.brand':'品牌篩選','find.city':'城市篩選','find.all':'全部','find.count':'共 {n} 間門市','find.list':'門市列表',
 });
 L.en=Object.assign({},zh,{
-  'nav.brands':'Brands','nav.about':'About Us','nav.find':'Find Us','nav.join':'Join Us',
+  'nav.home':'Home','nav.about':'About Us','nav.brands':'Our Brands','nav.find':'Find Us','nav.join':'Join Us',
+  'nav.stores':'Store Locator','nav.media':'Press',
   'back':'Back to Top','back.brands':'← Back to Brands',
   'hero.eyebrow':'BRAND ECOSYSTEM','hero.sub':'From one cup to many brands','hero.cta':'Learn More',
   'm1.title':'DRINKDREAM, From Shanghai.','m1.desc':'Founded in 2025 in Shanghai, a comprehensive group integrating brand incubation, investment, agency, operation, and management.',
@@ -272,8 +275,6 @@ function applyLang(){
   document.documentElement.lang=lang==='zh-TW'?'zh-TW':lang==='zh'?'zh-CN':'en';
   const page=detectPage();
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)});
-  const navLinks=document.querySelectorAll('.nav > a'),navKeys=['nav.brands','nav.about','nav.find','nav.join'];
-  navLinks.forEach((a,i)=>{if(navKeys[i])a.textContent=t(navKeys[i])});
   const backEl=document.querySelector('.back-home');if(backEl)backEl.textContent=t('back.brands');
   if(page==='home')applyHomepage();
   if(page.startsWith('brand_'))applyBrandPage(page.replace('brand_',''));
